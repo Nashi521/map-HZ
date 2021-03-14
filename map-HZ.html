@@ -53,13 +53,19 @@
 
       myChart.showLoading();
       
-      $.ajax({
-        url: 'json/data.json',
-        async: false,
-        success: function (data) {
-          mapData = data;
-        }
-      })
+      // $.ajax({
+      //   type:"GET",
+      //   url: 'json/data.json',
+      //   async: false,
+      //   dataType: "json",
+      //   success: function (data) {
+      //     mapData = data;
+      //   }
+      // })
+
+      function getdata(data){
+        mapData = data;
+      }
 
       $.get(ROOT_PATH, function (geoJson) {
         myChart.hideLoading();
@@ -149,5 +155,6 @@
         $("#table").html(html);
       });
     </script>
+    <script type="text/javascript" src="json/data.js"></script>
   </body>
 </html>
