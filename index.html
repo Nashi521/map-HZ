@@ -36,6 +36,9 @@
   </head>
   
   <body>
+    <script type="text/javascript" src="js/echarts.min.js"></script>
+    <script type="text/javascript" src="js/jquery.js"></script>
+    
     <div id="map" style="height: 100%;width: 70%;float: left;"></div>
     <div id="table" style="float: left;width: 30%;">
       <table border="1" style="text-align: center;">
@@ -55,8 +58,6 @@
       </table>
     </div>
 
-    <script type="text/javascript" src="js/echarts.min.js"></script>
-    <script type="text/javascript" src="js/jquery.js"></script>
     <script type="text/javascript">
       var ROOT_PATH = "https://geo.datav.aliyun.com/areas_v2/bound/330000_full.json";
       var dom = document.getElementById("map");
@@ -243,5 +244,6 @@
       });
     </script>
     <script type="text/javascript" src="json/data.js"></script>
+
   </body>
 </html>
