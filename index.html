@@ -18,21 +18,19 @@
         font-size: 0.1rem;
       }
 
-      table {
-        width: 80%;
-        height: 100%;
-        border-collapse: collapse;
-        font-size: 30px;
-        color: #fffffc;
-        border: 3px solid white;
-        margin-top: 50px;
+      dl{
+            margin:0;
       }
-
-      caption,
-      th,
-      td {
-        height: 70px;
-        text-align: center;
+      #list {
+        position: absolute; 
+        bottom: 10%; 
+        right: 3%;
+        overflow: hidden;
+        height: 30%;
+        width: 45%;
+        margin-left: 29%;
+        margin-top: 10%;
+        background: rgb(255, 255, 255);
       }
     </style>
   </head>
@@ -41,25 +39,10 @@
     <script type="text/javascript" src="js/echarts.min.js"></script>
     <script type="text/javascript" src="js/jquery.js"></script>
 
-    <div id="map" style="height: 100%; width: 70%; float: left"></div>
-    <div id="table" style="float: left; width: 30%">
-      <table border="1" style="text-align: center">
-        <caption>
-          浙江省工作站
-        </caption>
-        <tr>
-          <th>地区</th>
-          <th>数量</th>
-        </tr>
-        <tr>
-          <td>杭州市</td>
-          <td>1000</td>
-        </tr>
-        <tr>
-          <td>舟山市</td>
-          <td>1000</td>
-        </tr>
-      </table>
+    <div id="map" style="height: 100%; width: 100%;"></div>
+    <div id="list">
+      <dl id="content"></dl>
+      <dl id="trans"></dl>
     </div>
 
     <script type="text/javascript" src="json/map.js"></script>
@@ -68,14 +51,18 @@
       var myChart = echarts.init(dom);
       var data;
       var geoCoordMap;
-      var table;
+      var barName;
+      var bar;
+      var list;
 
       var option;
 
       function getdata(params) {
         data = params.data;
         geoCoordMap = params.geoCoordMap;
-        table = params.table;
+        barName = params.barName;
+        bar = params.bar;
+        list = params.list;
       }
 
       var convertData = function (data) {
@@ -98,13 +85,74 @@
         (option = {
           title: {
             text: "浙江省生命健康产业博士后工作站集中发布平台",
-            subtext: "数据来自...",
-            left: "3%",
+            subtext: "",
+            left: "center",
             top: "3%",
             textStyle: {
               color: "#FFAC50",
               fontSize: 40,
             },
+          },
+          grid: {
+            right: '3%',
+            top: '15%',
+            height: '30%',
+            width: '45%'
+          },
+          color: ["#0a2dae", "#4cabce", "#006699"],
+          legend: {
+            data: [
+              "国家级博士后科研工作站",
+              "浙江省级博士后工作站",
+              "高校博士后流动站",
+            ],
+            right: "15%",
+            top: '10%',
+            textStyle: {
+              color: "#fff"
+            }
+          },
+          tooltip: {},
+          xAxis: {
+            data: [
+              "省直部属",
+              "杭州",
+              "宁波",
+              "温州",
+              "湖州",
+              "嘉兴",
+              "绍兴",
+              "金华",
+              "衢州",
+              "舟山",
+              "台州",
+              "丽水",
+            ],
+            axisLine: { onZero: true },
+            splitLine: { show: false },
+            splitArea: { show: false },
+            axisTick: {
+              interval: 0
+            },
+            axisLabel: {
+              color: "#fff"
+            },
+            axisLine: {
+              lineStyle: {
+                type: "solid",
+                color: "#fff",
+                width: 0.5
+              }
+            }
+          },
+          yAxis: {
+            axisLine: {
+              lineStyle: {
+                type: "solid",
+                color: "#fff",
+                width: 0.5
+              }
+            }
           },
           tooltip: {
             trigger: "item",
@@ -120,6 +168,8 @@
             map: "HZ",
             show: true,
             roam: true,
+            left: '10%',
+            top: '15%',
             label: {
               normal: {
                 show: true,
@@ -210,6 +260,42 @@
               hoverAnimation: true,
               zlevel: 1,
             },
+            {
+              name: barName[0],
+              type: "bar",
+              stack: "stack",
+              emphasis: {
+                itemStyle: {
+                  shadowBlur: 10,
+                  shadowColor: "rgba(0,0,0,0.3)",
+                },
+              },
+              data: bar[0],
+            },
+            {
+              name: barName[1],
+              type: "bar",
+              stack: "stack",
+              emphasis: {
+                itemStyle: {
+                  shadowBlur: 10,
+                  shadowColor: "rgba(0,0,0,0.3)",
+                },
+              },
+              data: bar[1],
+            },
+            {
+              name: barName[2],
+              type: "bar",
+              stack: "stack",
+              emphasis: {
+                itemStyle: {
+                  shadowBlur: 10,
+                  shadowColor: "rgba(0,0,0,0.3)"
+                },
+              },
+              data: bar[2],
+            },
           ],
         })
       );
@@ -221,28 +307,40 @@
       window.addEventListener("resize", function () {
         myChart.resize();
       });
+    </script>
+    <script>
 
-      myChart.off("click");
-      myChart.on("click", function (params) {
-        var html = `
-          <table border="1" style="text-align: center;">
-            <caption>${params.data.name}工作站列表</caption>
-            <tr>
-              <th>No</th>
-              <th>工作站</th>
-            </tr>
-        `;
-        for (var i = 0; i < table[params.dataIndex].length; i++) {
-          html += `
-              <tr>
-                <td>${i + 1}</td>
-                <td>${table[params.dataIndex][i]}</td>
-              </tr>
+      var html;
+      var c1=document.getElementById("content");
+      var c2=document.getElementById("trans");
+      var ca=document.getElementById("list");
+      c2.innerHTML=c1.innerHTML;
+      var cas=null;
+
+      window.onload=function() {
+        for(var i=0; i<list.length;i++) {
+            html +=`
+              <dd>${list[i]}</dd>
             `;
         }
-        html += `</table>`;
-        $("#table").html(html);
-      });
+        $("#content").html(html);
+        st();
+      }
+      cas=setInterval('st()',50);
+
+      function st(){
+      if(ca.scrollTop>=c1.offsetHeight) {
+        ca.scrollTop=0;
+        }else{
+          ca.scrollTop++;
+        }
+        // ca.onmouseover=function() {
+        //     clearInterval(cas);
+        // }
+        // ca.onmouseout=function() {
+        //     cas=setInterval('st()',50);
+        // }
+      }
     </script>
   </body>
 </html>
