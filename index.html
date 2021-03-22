@@ -310,12 +310,11 @@
     </script>
     <script>
 
-      var html;
-      var c1=document.getElementById("content");
-      var c2=document.getElementById("trans");
-      var ca=document.getElementById("list");
-      c2.innerHTML=c1.innerHTML;
-      var cas=null;
+      var html = `<dt></dt>`;
+      var c1 = document.getElementById("content");
+      var c2 = document.getElementById("trans");
+      var ca = document.getElementById("list");
+      var cas = null;
 
       window.onload=function() {
         for(var i=0; i<list.length;i++) {
@@ -324,6 +323,7 @@
             `;
         }
         $("#content").html(html);
+        c2.innerHTML=c1.innerHTML;
         st();
       }
       cas=setInterval('st()',50);
