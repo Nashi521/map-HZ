@@ -3,247 +3,344 @@
   <head>
     <meta charset="utf-8" />
     <style>
-    html {
-      height: 100%;
-      cursor: move;
-    }
-    
-    body {
-      width: 100%;
-      height: 100%;
-      margin: 0;
-      overflow: hidden;
-      background-color:#3653a3;
-      color:#666;
-      font-size: .1rem;
-    }
+      html {
+        height: 100%;
+        cursor: move;
+      }
 
-    table {
-      width: 80%;
-      height: 100%;
-      border-collapse: collapse;
-      font-size: 30px;
-      color: #fffffc;
-      border: 3px solid white;
-      margin-top: 50px;
-    }
+      body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        overflow: hidden;
+        background-color: #3653a3;
+        color: #666;
+        font-size: 0.1rem;
+      }
 
-    caption,th,td {
-      height: 70px;
-      text-align: center;
-    }
+      dl{
+            margin:0;
+      }
+      #list {
+        position: absolute; 
+        bottom: 10%; 
+        right: 3%;
+        overflow: hidden;
+        height: 30%;
+        width: 45%;
+        margin-left: 29%;
+        margin-top: 10%;
+        background: rgb(255, 255, 255);
+      }
     </style>
   </head>
-  
+
   <body>
     <script type="text/javascript" src="js/echarts.min.js"></script>
     <script type="text/javascript" src="js/jquery.js"></script>
-    
-    <div id="map" style="height: 100%;width: 70%;float: left;"></div>
-    <div id="table" style="float: left;width: 30%;">
-      <table border="1" style="text-align: center;">
-        <caption>浙江省工作站</caption>
-        <tr>
-          <th>地区</th>
-          <th>数量</th>
-        </tr>
-        <tr>
-          <td>杭州市</td>
-          <td>1000</td>
-        </tr>
-        <tr>
-          <td>舟山市</td>
-          <td>1000</td>
-        </tr>
-      </table>
+
+    <div id="map" style="height: 100%; width: 100%;"></div>
+    <div id="list">
+      <dl id="content"></dl>
+      <dl id="trans"></dl>
     </div>
 
+    <script type="text/javascript" src="json/map.js"></script>
     <script type="text/javascript">
-      var ROOT_PATH = "https://geo.datav.aliyun.com/areas_v2/bound/330000_full.json";
       var dom = document.getElementById("map");
       var myChart = echarts.init(dom);
       var data;
       var geoCoordMap;
-      var table;
+      var barName;
+      var bar;
+      var list;
 
       var option;
 
-      function getdata(params){
+      function getdata(params) {
         data = params.data;
         geoCoordMap = params.geoCoordMap;
-        table = params.table;
+        barName = params.barName;
+        bar = params.bar;
+        list = params.list;
       }
 
-      var convertData = function(data) {
+      var convertData = function (data) {
         var res = [];
         for (var i = 0; i < data.length; i++) {
-            var geoCoord = geoCoordMap[data[i].name];
-            if (geoCoord) {
-                res.push({
-                    name: data[i].name,
-                    value: geoCoord.concat(data[i].value)
-                });
-            }
+          var geoCoord = geoCoordMap[data[i].name];
+          if (geoCoord) {
+            res.push({
+              name: data[i].name,
+              value: geoCoord.concat(data[i].value),
+            });
+          }
         }
         return res;
-      }
-
-      myChart.showLoading();
-
-      $.get(ROOT_PATH, function (geoJson) {
-        myChart.hideLoading();
-
-        echarts.registerMap("HZ", geoJson);
-
-        myChart.setOption(
-          (option = {
-            title: {
-              text: "浙江省生命健康产业博士后工作站集中发布平台",
-              subtext: "数据来自...",
-              left: '3%',
-              top: '3%',
-              textStyle: {
-                color: '#FFAC50',
-                fontSize: 40
+      };
+    </script>
+    <script type="text/javascript" src="json/data.js"></script>
+    <script>
+      myChart.setOption(
+        (option = {
+          title: {
+            text: "浙江省生命健康产业博士后工作站集中发布平台",
+            subtext: "",
+            left: "center",
+            top: "3%",
+            textStyle: {
+              color: "#FFAC50",
+              fontSize: 40,
+            },
+          },
+          grid: {
+            right: '3%',
+            top: '15%',
+            height: '30%',
+            width: '45%'
+          },
+          color: ["#0a2dae", "#4cabce", "#006699"],
+          legend: {
+            data: [
+              "国家级博士后科研工作站",
+              "浙江省级博士后工作站",
+              "高校博士后流动站",
+            ],
+            right: "15%",
+            top: '10%',
+            textStyle: {
+              color: "#fff"
+            }
+          },
+          tooltip: {},
+          xAxis: {
+            data: [
+              "省直部属",
+              "杭州",
+              "宁波",
+              "温州",
+              "湖州",
+              "嘉兴",
+              "绍兴",
+              "金华",
+              "衢州",
+              "舟山",
+              "台州",
+              "丽水",
+            ],
+            axisLine: { onZero: true },
+            splitLine: { show: false },
+            splitArea: { show: false },
+            axisTick: {
+              interval: 0
+            },
+            axisLabel: {
+              color: "#fff"
+            },
+            axisLine: {
+              lineStyle: {
+                type: "solid",
+                color: "#fff",
+                width: 0.5
+              }
+            }
+          },
+          yAxis: {
+            axisLine: {
+              lineStyle: {
+                type: "solid",
+                color: "#fff",
+                width: 0.5
+              }
+            }
+          },
+          tooltip: {
+            trigger: "item",
+            formatter: function (params) {
+              if (typeof params.value[2] == "undefined") {
+                return params.name + " : " + params.value;
+              } else {
+                return params.name + " : " + params.value[2];
               }
             },
-            tooltip: {
-              trigger: "item",
-              formatter: function(params) {
-                  if (typeof(params.value)[2] == "undefined") {
-                      return params.name + ' : ' + params.value;
-                  } else {
-                      return params.name + ' : ' + params.value[2];
-                  }
-              }
-            },
-            geo: {
-                map: 'HZ',
+          },
+          geo: {
+            map: "HZ",
+            show: true,
+            roam: true,
+            left: '10%',
+            top: '15%',
+            label: {
+              normal: {
                 show: true,
-                roam: true,
-                label: {
-                    normal: {
-                      show: true,
-                      textStyle: {
-                        color: '#fff'
-                      }
-                    },
-                    emphasis: {
-                      show: false,
-                      textStyle: {
-                        color: '#fff'
-                      }
-                    }
+                textStyle: {
+                  color: "#fff",
                 },
-                itemStyle: {
-                    normal: {
-                        areaColor: '#3a7fd5',
-                        borderColor: '#0a53e9',
-                        shadowColor: '#092f8f', 
-                        shadowBlur: 20
-                    },
-                    emphasis: {
-                        areaColor: '#0a2dae',
-                    }
-                }
-            },
-            series: [
-              {
-                type: "map",
-                map: 'HZ',
-                geoIndex: 0,
-                roam: true,   // 只想要开启缩放或者平移，可以设置成 'scale' 或者 'move',设置成 true 为都开启
-                scaleLimit: {
-                  min: 1,
-                  max: 2
-                },
-                mapType: "HZ",
-                label: {
-                    normal: {
-                        show: false
-                    },
-                    emphasis: {
-                        show: true,
-                        textStyle: {
-                            color: '#fff'
-                        }
-                    }
-                },
-                data: data,
-                itemStyle: {
-                    normal: {
-                        areaColor: '#004981',
-                        borderColor: '#029fd4',
-                    },
-                    emphasis: {
-                        areaColor: '#2B91B7'
-                    }
-                }
               },
-              {
-                  name: 'pin',
-                  type: 'scatter',
-                  coordinateSystem: 'geo',
-                  symbol: 'pin',
-                  symbolSize: [50, 50],
-                  label: {
-                      normal: {
-                          show: true,
-                          textStyle: {
-                              color: '#fff',
-                              fontSize: 9,
-                          },
-                          formatter(value) {
-                              return value.data.value[2]
-                          }
-                      }
+              emphasis: {
+                show: false,
+                textStyle: {
+                  color: "#fff",
+                },
+              },
+            },
+            itemStyle: {
+              normal: {
+                areaColor: "#3a7fd5",
+                borderColor: "#0a53e9",
+                shadowColor: "#092f8f",
+                shadowBlur: 20,
+              },
+              emphasis: {
+                areaColor: "#0a2dae",
+              },
+            },
+          },
+          series: [
+            {
+              type: "map",
+              map: "HZ",
+              geoIndex: 0,
+              roam: true, // 只想要开启缩放或者平移，可以设置成 'scale' 或者 'move',设置成 true 为都开启
+              scaleLimit: {
+                min: 1,
+                max: 2,
+              },
+              mapType: "HZ",
+              label: {
+                normal: {
+                  show: false,
+                },
+                emphasis: {
+                  show: true,
+                  textStyle: {
+                    color: "#fff",
                   },
-                  itemStyle: {
-                      normal: {
-                          color: '#D8BC37', //标志颜色
-                      }
+                },
+              },
+              data: data,
+              itemStyle: {
+                normal: {
+                  areaColor: "#004981",
+                  borderColor: "#029fd4",
+                },
+                emphasis: {
+                  areaColor: "#2B91B7",
+                },
+              },
+            },
+            {
+              name: "pin",
+              type: "scatter",
+              coordinateSystem: "geo",
+              symbol: "pin",
+              symbolSize: [50, 50],
+              label: {
+                normal: {
+                  show: true,
+                  textStyle: {
+                    color: "#fff",
+                    fontSize: 9,
                   },
-                  data: convertData(data),
-                  showEffectOn: 'render',
-                  rippleEffect: {
-                      brushType: 'stroke'
+                  formatter(value) {
+                    return value.data.value[2];
                   },
-                  hoverAnimation: true,
-                  zlevel: 1
-              }
-            ]
-          })
-        );
-      });
+                },
+              },
+              itemStyle: {
+                normal: {
+                  color: "#D8BC37", //标志颜色
+                },
+              },
+              data: convertData(data),
+              showEffectOn: "render",
+              rippleEffect: {
+                brushType: "stroke",
+              },
+              hoverAnimation: true,
+              zlevel: 1,
+            },
+            {
+              name: barName[0],
+              type: "bar",
+              stack: "stack",
+              emphasis: {
+                itemStyle: {
+                  shadowBlur: 10,
+                  shadowColor: "rgba(0,0,0,0.3)",
+                },
+              },
+              data: bar[0],
+            },
+            {
+              name: barName[1],
+              type: "bar",
+              stack: "stack",
+              emphasis: {
+                itemStyle: {
+                  shadowBlur: 10,
+                  shadowColor: "rgba(0,0,0,0.3)",
+                },
+              },
+              data: bar[1],
+            },
+            {
+              name: barName[2],
+              type: "bar",
+              stack: "stack",
+              emphasis: {
+                itemStyle: {
+                  shadowBlur: 10,
+                  shadowColor: "rgba(0,0,0,0.3)"
+                },
+              },
+              data: bar[2],
+            },
+          ],
+        })
+      );
 
       if (option && typeof option === "object") {
         myChart.setOption(option);
       }
 
-      myChart.off("click");
-      myChart.on("click",function (params){
-        console.log(params);
-        var html = `
-          <table border="1" style="text-align: center;">
-            <caption>${params.data.name}工作站列表</caption>
-            <tr>
-              <th>No</th>
-              <th>工作站</th>
-            </tr>
-        `;
-        for(var i=0; i<table[params.dataIndex].length;i++){
-            html +=`
-              <tr>
-                <td>${i+1}</td>
-                <td>${table[params.dataIndex][i]}</td>
-              </tr>
-            `;
-        }
-        html += `</table>`;
-        $("#table").html(html);
+      window.addEventListener("resize", function () {
+        myChart.resize();
       });
     </script>
-    <script type="text/javascript" src="json/data.js"></script>
+    <script>
 
+      var html = `<dt></dt>`;
+      var c1 = document.getElementById("content");
+      var c2 = document.getElementById("trans");
+      var ca = document.getElementById("list");
+      var cas = null;
+
+      window.onload=function() {
+        for(var i=0; i<list.length;i++) {
+            html +=`
+              <dd>${list[i]}</dd>
+            `;
+        }
+        $("#content").html(html);
+        c2.innerHTML=c1.innerHTML;
+        st();
+      }
+      cas=setInterval('st()',50);
+
+      function st(){
+      if(ca.scrollTop>=c1.offsetHeight) {
+        ca.scrollTop=0;
+        }else{
+          ca.scrollTop++;
+        }
+        // ca.onmouseover=function() {
+        //     clearInterval(cas);
+        // }
+        // ca.onmouseout=function() {
+        //     cas=setInterval('st()',50);
+        // }
+      }
+    </script>
   </body>
 </html>
