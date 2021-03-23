@@ -16,6 +16,7 @@ body {
 
 td {
   color: white;
+  font-size: 16px;
 }
 
 .fl {
@@ -62,6 +63,7 @@ td {
   right: 3%;
   width: 50%;
   height: 40%;
+  z-index:-1;
 }
 
 #container2 {
@@ -133,14 +135,28 @@ td {
   font-family: "微软雅黑";
   font-size: 20px;
 }
-.data-title {
+.data-title1 {
+  background-color: #000c3b;
+  width: 328px;
+  margin: -18px auto 0 auto;
+  color: #83c7e3;
+  font-size: 20px;
+}
+.data-title1 span {
+  text-align: center;
+  width: 300px;
+  display: inline-block;
+  text-align: center;
+  font-size: 18px;
+}
+.data-title2 {
   background-color: #000c3b;
   width: 178px;
   margin: -18px auto 0 auto;
   color: #83c7e3;
   font-size: 20px;
 }
-.data-title span {
+.data-title2 span {
   text-align: center;
   width: 150px;
   display: inline-block;
