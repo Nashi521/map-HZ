@@ -2,47 +2,56 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <style>
-      html {
-        height: 100%;
-        cursor: move;
-      }
-
-      body {
-        width: 100%;
-        height: 100%;
-        margin: 0;
-        overflow: hidden;
-        background-color: #3653a3;
-        color: #666;
-        font-size: 0.1rem;
-      }
-
-      dl{
-            margin:0;
-      }
-      #list {
-        position: absolute; 
-        bottom: 10%; 
-        right: 3%;
-        overflow: hidden;
-        height: 30%;
-        width: 45%;
-        margin-left: 29%;
-        margin-top: 10%;
-        background: rgb(255, 255, 255);
-      }
-    </style>
+    <link href="css/public.css" rel="stylesheet" type="text/css"/>
+    <title>浙江省生命健康产业博士后工作站集中发布中心</title>
   </head>
 
   <body>
     <script type="text/javascript" src="js/echarts.min.js"></script>
     <script type="text/javascript" src="js/jquery.js"></script>
 
-    <div id="map" style="height: 100%; width: 100%;"></div>
-    <div id="list">
-      <dl id="content"></dl>
-      <dl id="trans"></dl>
+    <div>
+      <i class="fl"><img src="images/title-left.png" /></i>
+      <i class="fr"><img src="images/title-right.png" /></i>
+    </div>
+
+    <div id="map" style="height: 100%; width: 100%"></div>
+    
+    <div id="container1">
+      <i class="topL"></i>
+      <i class="topR"></i>
+      <i class="bottomL"></i>
+      <i class="bottomR"></i>
+      <div class="data-title">
+        <b class="data-title-left">[</b>
+        <span>设站单位数据</span>
+        <b class="data-title-right">]</b>
+      </div>
+    </div>
+
+    <div id="container2">
+      <i class="topL"></i>
+      <i class="topR"></i>
+      <i class="bottomL"></i>
+      <i class="bottomR"></i>
+      <div class="data-title">
+        <b class="data-title-left">[</b>
+        <span>招聘要求</span>
+        <b class="data-title-right">]</b>
+      </div>
+
+      <table id="table">
+        <tr id="tb_title">
+          <th width="20%" align="center">招收单位</th>
+          <th width="40%" align="center">招收博士后项目</th>
+          <th width="30%" align="center">所需人员专业方向</th>
+          <th width="10%" align="center">发布日期</th>
+        </tr>
+      </table>
+      <div id="list">
+        <div id="content"></div>
+        <div id="trans"></div>
+      </div>
     </div>
 
     <script type="text/javascript" src="json/map.js"></script>
@@ -94,10 +103,10 @@
             },
           },
           grid: {
-            right: '3%',
-            top: '15%',
-            height: '30%',
-            width: '45%'
+            right: "5%",
+            top: "18%",
+            height: "30%",
+            width: "45%",
           },
           color: ["#0a2dae", "#4cabce", "#006699"],
           legend: {
@@ -106,11 +115,11 @@
               "浙江省级博士后工作站",
               "高校博士后流动站",
             ],
-            right: "15%",
-            top: '10%',
+            right: "18%",
+            top: "15%",
             textStyle: {
-              color: "#fff"
-            }
+              color: "#fff",
+            },
           },
           tooltip: {},
           xAxis: {
@@ -132,27 +141,27 @@
             splitLine: { show: false },
             splitArea: { show: false },
             axisTick: {
-              interval: 0
+              interval: 0,
             },
             axisLabel: {
-              color: "#fff"
+              color: "#fff",
             },
             axisLine: {
               lineStyle: {
                 type: "solid",
                 color: "#fff",
-                width: 0.5
-              }
-            }
+                width: 0.5,
+              },
+            },
           },
           yAxis: {
             axisLine: {
               lineStyle: {
                 type: "solid",
                 color: "#fff",
-                width: 0.5
-              }
-            }
+                width: 0.5,
+              },
+            },
           },
           tooltip: {
             trigger: "item",
@@ -167,9 +176,9 @@
           geo: {
             map: "HZ",
             show: true,
-            roam: true,
-            left: '10%',
-            top: '15%',
+            roam: false,
+            left: "8%",
+            top: "15%",
             label: {
               normal: {
                 show: true,
@@ -201,7 +210,7 @@
               type: "map",
               map: "HZ",
               geoIndex: 0,
-              roam: true, // 只想要开启缩放或者平移，可以设置成 'scale' 或者 'move',设置成 true 为都开启
+              roam: false, // 只想要开启缩放或者平移，可以设置成 'scale' 或者 'move',设置成 true 为都开启
               scaleLimit: {
                 min: 1,
                 max: 2,
@@ -288,7 +297,7 @@
               emphasis: {
                 itemStyle: {
                   shadowBlur: 10,
-                  shadowColor: "rgba(0,0,0,0.3)"
+                  shadowColor: "rgba(0,0,0,0.3)",
                 },
               },
               data: bar[2],
@@ -306,29 +315,29 @@
       });
     </script>
     <script>
-
-      var html = `<dt></dt>`;
+      var html = `<table border="1">`;
       var c1 = document.getElementById("content");
       var c2 = document.getElementById("trans");
       var ca = document.getElementById("list");
       var cas = null;
 
-      window.onload=function() {
-        for(var i=0; i<list.length;i++) {
-            html +=`
-              <dd>${list[i]}</dd>
+      window.onload = function () {
+        for (var i = 0; i < list.unit.length; i++) {
+          html += `
+              <tr><td width="20%" align="center">${list.unit[i]}</td><td width="40%" align="center">${list.project_name[i]}</td><td width="30%" align="center">${list.study_area[i]}</td><td width="10%" align="center">${list.apply_on[i]}</td></tr>
             `;
         }
+        html += `</table>`;
         $("#content").html(html);
-        c2.innerHTML=c1.innerHTML;
+        $("#trans").html(html);
         st();
-      }
-      cas=setInterval('st()',50);
+      };
+      cas = setInterval("st()", 50);
 
-      function st(){
-      if(ca.scrollTop>=c1.offsetHeight) {
-        ca.scrollTop=0;
-        }else{
+      function st() {
+        if (ca.scrollTop >= c1.offsetHeight) {
+          ca.scrollTop = 0;
+        } else {
           ca.scrollTop++;
         }
         // ca.onmouseover=function() {
