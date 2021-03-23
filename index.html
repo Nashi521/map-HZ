@@ -86,40 +86,6 @@
     </script>
     <script type="text/javascript" src="json/data.js"></script>
     <script>
-      var html = `<table border="1">`;
-      var c1 = document.getElementById("content");
-      var c2 = document.getElementById("trans");
-      var ca = document.getElementById("list");
-      var cas = null;
-
-      window.onload = function () {
-        for (var i = 0; i < unit.length; i++) {
-          html += `
-              <tr><td width="25%" align="center">${unit[i]}</td><td width="45%" align="center">${project_name[i]}</td><td width="30%" align="center">${study_area[i]}</td></tr>
-            `;
-        }
-        html += `</table>`;
-        $("#content").html(html);
-        $("#trans").html(html);
-        st();
-      };
-      cas = setInterval("st()", 50);
-
-      function st() {
-        if (ca.scrollTop >= c1.offsetHeight) {
-          ca.scrollTop = 0;
-        } else {
-          ca.scrollTop++;
-        }
-        // ca.onmouseover=function() {
-        //     clearInterval(cas);
-        // }
-        // ca.onmouseout=function() {
-        //     cas=setInterval('st()',50);
-        // }
-      }
-    </script>
-    <script>
       myChart.setOption(
         (option = {
           title: {
@@ -171,10 +137,11 @@
             splitLine: { show: false },
             splitArea: { show: false },
             axisTick: {
-              interval: 0,
+              interval: 0
             },
             axisLabel: {
               color: "#fff",
+              interval: 0
             },
             axisLine: {
               lineStyle: {
@@ -207,7 +174,7 @@
             map: "HZ",
             show: true,
             roam: false,
-            left: "8%",
+            left: "5%",
             top: "15%",
             label: {
               normal: {
@@ -343,6 +310,40 @@
       window.addEventListener("resize", function () {
         myChart.resize();
       });
+    </script>
+    <script>
+      var html = `<table border="1">`;
+      var c1 = document.getElementById("content");
+      var c2 = document.getElementById("trans");
+      var ca = document.getElementById("list");
+      var cas = null;
+
+      window.onload = function () {
+        for (var i = 0; i < unit.length; i++) {
+          html += `
+              <tr><td width="25%" align="center">${unit[i]}</td><td width="45%" align="center">${project_name[i]}</td><td width="30%" align="center">${study_area[i]}</td></tr>
+            `;
+        }
+        html += `</table>`;
+        $("#content").html(html);
+        $("#trans").html(html);
+        st();
+      };
+      cas = setInterval("st()", 50);
+
+      function st() {
+        if (ca.scrollTop >= c1.offsetHeight) {
+          ca.scrollTop = 0;
+        } else {
+          ca.scrollTop++;
+        }
+        // ca.onmouseover=function() {
+        //     clearInterval(cas);
+        // }
+        // ca.onmouseout=function() {
+        //     cas=setInterval('st()',50);
+        // }
+      }
     </script>
   </body>
 </html>
