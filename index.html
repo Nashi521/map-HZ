@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <link href="css/public.css" rel="stylesheet" type="text/css"/>
+    <link href="css/public.css" rel="stylesheet" type="text/css" />
     <title>浙江省生命健康产业博士后工作站集中发布中心</title>
   </head>
 
@@ -16,7 +16,7 @@
     </div>
 
     <div id="map" style="height: 100%; width: 100%"></div>
-    
+
     <div id="container1">
       <i class="topL"></i>
       <i class="topR"></i>
@@ -58,14 +58,6 @@
     <script type="text/javascript">
       var dom = document.getElementById("map");
       var myChart = echarts.init(dom);
-      var data;
-      var geoCoordMap;
-      var barName;
-      var bar;
-      var list;
-      var unit;
-      var project_name;
-      var study_area;
 
       var option;
 
@@ -74,11 +66,10 @@
         geoCoordMap = params.geoCoordMap;
         barName = params.barName;
         bar = params.bar;
-        list = params.list;
-        unit = list.unit;
-        project_name = list.project_name;
-        study_area = list.study_area;
-        apply_on = list.apply_on;
+        unit = params.unit;
+        project_name = params.project_name;
+        study_area = params.study_area;
+        apply_on = params.apply_on;
       }
 
       var convertData = function (data) {
